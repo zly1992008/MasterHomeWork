@@ -11,18 +11,18 @@ input_layer_size  = 20;    % 4x5 Input Pixels
 hidden_layer_size = 30;    % 30 hidden units
 num_labels = 5;            % 5 labels {A,E,I,O,U}
 lambda = 0.80;             % Regularization parameter
-alpha = 0.1;              % Learning rate
+alpha = 0.1;               % Learning rate
 maxIte = 100;              % Max gradient descent times
-stopCri = 10^(-4);         % Stopping criterion
+stopCri = 10^(-4);         % Stopping criterion(difference)
 % Standard epsilon
 epsilon = sqrt(6)/sqrt(input_layer_size+ num_labels);
 % Random initialization of weights (a.k.a Theta)
-Theta1 = rand(30,21)*2*epsilon-epsilon;
-Theta2 = rand(5,31)*2*epsilon-epsilon;
+Weight1 = rand(30,21)*2*epsilon-epsilon;
+Weight2 = rand(5,31)*2*epsilon-epsilon;
 input = PP';
 target = TT';
 globalGrad = 1;
-nn_params = [Theta1(:) ; Theta2(:)];
+nn_params = [Weight1(:) ; Weight2(:)];
 J_history = zeros(maxIte, 1);
 %% =========== Part 1 Training BP NeuralNetwork=============
 
@@ -46,9 +46,9 @@ plot(1:numel(J_history), J_history, '-b', 'LineWidth', 2);
 xlabel('Number of iterations');
 ylabel('Cost J');
 
-%% =========== Part 2 Implement Predict=============
-finalTheta1 = reshape(nn_params(1:630),30,21);
-finalTheta2 = reshape(nn_params(631:785),5,31);
-pred = predict(finalTheta1, finalTheta2, input);
+%% =========== Part 1 Implement Predict=============
+finalWeight1 = reshape(nn_params(1:630),30,21);
+finalWeight2 = reshape(nn_params(631:785),5,31);
+pred = predict(finalWeight1, finalWeight2, input);
 
 fprintf('\nTraining Set Accuracy: %f\n', mean(double(pred == target)) * 100);

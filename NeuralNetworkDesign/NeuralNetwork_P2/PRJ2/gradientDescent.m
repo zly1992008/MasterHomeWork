@@ -1,6 +1,6 @@
-function [theta, J_history] = gradientDescentMulti(X, y, theta, alpha, num_iters)
-%GRADIENTDESCENTMULTI Performs gradient descent to learn theta
-%   theta = GRADIENTDESCENTMULTI(x, y, theta, alpha, num_iters) updates theta by
+function [weight, J_history] = gradientDescentMulti(X, y, weight, alpha, num_iters)
+%GRADIENTDESCENTMULTI Performs gradient descent to learn weight
+%   weight = GRADIENTDESCENTMULTI(x, y, theta, alpha, num_iters) updates weight by
 %   taking num_iters gradient steps with learning rate alpha
 
 % Initialize some useful values
@@ -10,16 +10,16 @@ J_history = zeros(num_iters, 1);
 for iter = 1:num_iters
     
     % hypothesis
-    h = X * theta;
+    h = X * weight;
     % X' * (h - y) = sum((h - y) .* X)'
-    theta = theta - alpha * (1 / m) * (X' * (h - y));
+    weight = weight - alpha * (1 / m) * (X' * (h - y));
     
     
     
     % ============================================================
     
     % Save the cost J in every iteration
-    J_history(iter) = computeCostMulti(X, y, theta);
+    J_history(iter) = computeCostMulti(X, y, weight);
     
 end
 

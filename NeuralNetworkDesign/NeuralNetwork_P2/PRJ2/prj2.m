@@ -64,7 +64,7 @@ title('Training Process')
 % finalWeight2 = reshape(nn_params(631:785),5,31);
 % pred = predict(finalWeight1, finalWeight2, input);
 % fprintf('\nTraining Set Accuracy: %f\n', mean(double(pred == target)) * 100);
-% finalTest(finalWeight1,finalWeight2,PP);
+finalTest(finalWeight1,finalWeight2,PP);
 % plotCheckerBoard(finalWeight1)
 % plotCheckerBoard(finalWeight2)
 faultTolerance(nn_params,PP,0.4);

@@ -1,3 +1,8 @@
+% This function is used to experiment fault tolerance
+% on trained BP neural networks
+% nn_params: unrolled by Weight1 and Weight2
+% PP :the original training matrix
+% faultRate: required percentage of zeros in Weights
 function faultTolerance(nn_params,PP,faultRate)
 lengthV = length(nn_params);
 faultNum = lengthV * faultRate;

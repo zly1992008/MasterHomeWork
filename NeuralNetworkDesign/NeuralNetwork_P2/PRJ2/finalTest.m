@@ -155,7 +155,7 @@ fprintf(fileID,'\t[%2.1g,%2.1g,%2.1g,%2.1g,%2.1g]''\t',(predict(finalWeight1, fi
 fprintf(fileID,'\t%d\t',0);
 fprintf(fileID,'\t%s\t',"Hit");
 
-% Testing Hebb with set pt201-pt225 (Medium noise set)
+% Testing BP with set pt201-pt225 (Medium noise set)
 % Test2
 pt201 = PP(:,1);
 fprintf(fileID,'\n%s\t',"pt201");
@@ -283,7 +283,7 @@ fprintf(fileID,'\t[%2.1g,%2.1g,%2.1g,%2.1g,%2.1g]''\t',(predict(finalWeight1, fi
 fprintf(fileID,'\t%d\t',0);
 fprintf(fileID,'\t%s\t',"Hit");
 
-% Testing Hebb with set pt301-pt325 (High noise set)
+% Testing BP with set pt301-pt325 (High noise set)
 % Test3
 pt301 = PP(:,1);
 fprintf(fileID,'\n%s\t',"pt301");

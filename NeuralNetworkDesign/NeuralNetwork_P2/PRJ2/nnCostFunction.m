@@ -32,8 +32,8 @@ Weight1_grad = zeros(size(Weight1));
 Weight2_grad = zeros(size(Weight2));
 
 
-% Part 1: Feedforward the neural network and return the cost in the
-%         variable J.
+% Feedforward the neural network and return the cost in the
+% variable J.
 % original X is 25x20, add one column 1 as bias to 25x21
 X = [ones(m,1) X];
 a2 = tansig(X * Weight1');

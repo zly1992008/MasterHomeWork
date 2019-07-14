@@ -14,8 +14,6 @@ for iter = 1:num_iters
     % X' * (h - y) = sum((h - y) .* X)'
     weight = weight - alpha * (1 / m) * (X' * (h - y));
     
-    
-    
     % ============================================================
     
     % Save the cost J in every iteration

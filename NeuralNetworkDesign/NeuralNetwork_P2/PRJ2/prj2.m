@@ -1,4 +1,4 @@
-% Project 1
+% Project 2
 % Author: Lieyuan Zhou
 % PatherID: 6177738
 
@@ -6,17 +6,18 @@
 clear ; close all; clc
 load('PRJ2TRAIN.mat');
 
-%% Setup the parameters you will use for this project
+%% Setup the parameters that will be used for this project
 input_layer_size  = 20;    % 4x5 Input Pixels
 hidden_layer_size = 30;    % 30 hidden units
 num_labels = 5;            % 5 labels {A,E,I,O,U}
 lambda = 0.80;             % Regularization parameter
 alpha = 0.1;               % Learning rate
-maxIte = 100;              % Max gradient descent times
-stopCri = 10^(-4);         % Stopping criterion(difference)
+maxIte = 200;              % Max gradient descent times
+stopIndex =200;             % StopIndex When Gradient Descent
+stopCri = 10^(-1);         % Stopping criterion(difference)
 % Standard epsilon
 epsilon = sqrt(6)/sqrt(input_layer_size+ num_labels);
-% Random initialization of weights (a.k.a Theta)
+% Random initialization of weights (a.k.a sqrt(6)/sqrt(inputsize + outputsize))
 Weight1 = rand(30,21)*2*epsilon-epsilon;
 Weight2 = rand(5,31)*2*epsilon-epsilon;
 input = PP';
@@ -35,20 +36,54 @@ for iter=1:maxIte
     globalGrad = grad;
     nn_params = nn_params - alpha * grad;
     
-    % Save the cost J in every iteration    
+    % Save the cost J in every iteration
     J_history(iter) = J;
-    if J < stopCri
-        return
+    if iter > 1 ...
+        && (abs(J_history(iter) - J_history(iter-1)) < stopCri)
+        stopIndex = iter;
+        fprintf('\nStop Iter Index: %d\n', iter);
+        break;
     end
 end
 
-plot(1:numel(J_history), J_history, '-b', 'LineWidth', 2);
-xlabel('Number of iterations');
-ylabel('Cost J');
-
-%% =========== Part 1 Implement Predict=============
 finalWeight1 = reshape(nn_params(1:630),30,21);
 finalWeight2 = reshape(nn_params(631:785),5,31);
-pred = predict(finalWeight1, finalWeight2, input);
+% plot(1:numel(J_history), J_history, '-b', 'LineWidth', 2);
+% plot(1:5:stopIndex, J_history(1:5:stopIndex), '-b', 'LineWidth', 2);
 
-fprintf('\nTraining Set Accuracy: %f\n', mean(double(pred == target)) * 100);
+figure
+X = linspace(0,60,13);
+Y = J_history(1:5:65);
+stem(X,Y,'filled')
+xlabel('Number of Epochs');
+ylabel('Mean Squared Error');
+title('Training Process')
+
+%% =========== Part 1 Implement Predict=============
+% finalWeight1 = reshape(nn_params(1:630),30,21);
+% finalWeight2 = reshape(nn_params(631:785),5,31);
+% pred = predict(finalWeight1, finalWeight2, input);
+% fprintf('\nTraining Set Accuracy: %f\n', mean(double(pred == target)) * 100);
+% finalTest(finalWeight1,finalWeight2,PP);
+% plotCheckerBoard(finalWeight1)
+% plotCheckerBoard(finalWeight2)
+faultTolerance(nn_params,PP,0.4);
+
+% Round Matrix to Print
+Weight1 = roundn(Weight1,-2);
+Weight2 = roundn(Weight2,-2);
+
+fid = fopen('Weight1.txt','wt');
+for ii = 1:size(Weight1,1)
+    fprintf(fid,'%g\t',Weight1(ii,:));
+    fprintf(fid,'\n');
+end
+fclose(fid)
+
+fid = fopen('Weight2.txt','wt');
+for ii = 1:size(Weight2,1)
+    fprintf(fid,'%g\t',Weight2(ii,:));
+    fprintf(fid,'\n');
+end
+fclose(fid)
+plotCheckerBoard(Weight2);

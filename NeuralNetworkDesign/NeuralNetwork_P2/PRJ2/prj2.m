@@ -13,7 +13,7 @@ num_labels = 5;            % 5 labels {A,E,I,O,U}
 lambda = 0.80;             % Regularization parameter
 alpha = 0.1;               % Learning rate
 maxIte = 200;              % Max gradient descent times
-stopIndex =200;             % StopIndex When Gradient Descent
+stopIndex =200;            % StopIndex When Gradient Descent
 stopCri = 10^(-1);         % Stopping criterion(difference)
 % Standard epsilon
 epsilon = sqrt(6)/sqrt(input_layer_size+ num_labels);
@@ -86,4 +86,4 @@ for ii = 1:size(Weight2,1)
     fprintf(fid,'\n');
 end
 fclose(fid)
-plotCheckerBoard(Weight2);
+plotCheckerBoard(Weight1);

@@ -1,18 +1,8 @@
-function [J,grad] = nnCostFunction(nn_params, ...
+function [J,grad] = momentumBP(nn_params, ...
     input_layer_size, ...
     hidden_layer_size, ...
     output_layer_size,...
-    X, y, lambda)
-%nnCostFunction Implements the neural network cost function for a two layer
-%neural network which performs classification
-%   [J grad] = NNCOSTFUNCTON(nn_params, hidden_layer_size, num_labels, ...
-%   X, y, lambda) computes the cost and gradient of the neural network. The
-%   parameters for the neural network are "unrolled" into the vector
-%   nn_params and need to be converted back into the weight matrices.
-%
-%   The returned parameter grad should be a "unrolled" vector of the
-%   partial derivatives of the neural network.
-%
+    X, y, gamma,last_nn_params)
 
 % Reshape nn_params back into the parameters Weight1 and Weight2, the weight matrices
 % for our 2 layer neural network
@@ -22,6 +12,14 @@ Weight1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
 
 % Weight2 1x31
 Weight2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
+    output_layer_size, (hidden_layer_size + 1));
+
+% Last Weight1 30x48
+Weight1Last = reshape(last_nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
+    hidden_layer_size, (input_layer_size + 1));
+
+% Last Weight2 1x31
+Weight2Last = reshape(last_nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
     output_layer_size, (hidden_layer_size + 1));
 
 % Setup some useful variables
@@ -67,18 +65,17 @@ DELTA2 = DELTA2(:,2:end); % 447x31 Removing delta2 for bias node
 Weight1_grad = (1/m) * (DELTA2' * A1); % 30x48
 Weight2_grad = (1/m) * (DELTA3' * A2); % 1x31
 
-% Implement regularization with the cost function and gradients.
-% Regularize grad
+if Weight1_grad > 0
+    Weight1_grad = -Weight1_grad;
+end
 
-Weight1_grad_reg_term = (lambda/m) * [zeros(size(Weight1, 1), 1) Weight1(:,2:end)]; % 30x48
-Weight2_grad_reg_term = (lambda/m) * [zeros(size(Weight2, 1), 1) Weight2(:,2:end)]; % 1x31
+if Weight2_grad > 0
+    Weight2_grad = -Weight2_grad;
+end
 
-Weight1_grad = Weight1_grad + Weight1_grad_reg_term;
-Weight2_grad = Weight2_grad + Weight2_grad_reg_term;
-
-% Regularize J (Cost Function)
-reg_term = (lambda/(2*m)) * (sum(sum(Weight1(:,2:end).^2)) + sum(sum(Weight2(:,2:end).^2))); %scalar
-J = J + reg_term;
+% Momentum
+Weight1_grad = gamma*(Weight1Last) - (1-gamma)*Weight1_grad;
+Weight2_grad = gamma*(Weight2Last) - (1-gamma)*Weight2_grad;
 
 % -------------------------------------------------------------
 

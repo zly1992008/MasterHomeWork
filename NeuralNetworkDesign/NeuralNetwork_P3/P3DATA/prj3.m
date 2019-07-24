@@ -12,7 +12,7 @@ input_layer_size  = 47;    % 47 neurons
 hidden_layer_size = 30;    % 30 hidden units
 output_layer_size = 1;     % Healthy or MI {1,0}
 lambda = 0.0;             % Regularization parameter
-alpha = 0.09;              % Learning rate
+alpha = 0.13;              % Learning rate
 maxIte = 8000;              % Max gradient descent times
 stopIndex =maxIte;            % StopIndex When Gradient Descent
 stopCri = 1^(-4);         % Stopping criterion(difference)
@@ -21,6 +21,11 @@ epsilon = sqrt(6)/sqrt(input_layer_size+ output_layer_size);
 % Random initialization of weights (a.k.a sqrt(6)/sqrt(inputsize + outputsize))
 Weight1 = rand(30,48)*2*epsilon-epsilon;
 Weight2 = rand(1,31)*2*epsilon-epsilon;
+
+% Nguyen-Widrow Initialization
+[Weight1,Weight2] = NguWidrowInit(input_layer_size...
+    ,hidden_layer_size...
+    ,output_layer_size);
 input = PPEKG';
 target = TTEKG';
 globalGrad = 1;
